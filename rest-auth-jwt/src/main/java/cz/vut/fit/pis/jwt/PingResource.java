@@ -36,7 +36,7 @@ public class PingResource
     
     @GET
     @Path("protected")
-    //@RolesAllowed("admin")
+    @RolesAllowed("admin")
     public String getProtected() {
         String login = (principal != null) ? principal.getName() : "unknown";
         return "Hello, " + login + " " + token.getGroups() + "! This is a protected resource.";
