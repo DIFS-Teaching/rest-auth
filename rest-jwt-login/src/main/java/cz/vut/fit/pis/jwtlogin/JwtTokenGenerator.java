@@ -1,4 +1,4 @@
-package cz.vut.fit.pis.jwt;
+package cz.vut.fit.pis.jwtlogin;
 
 import static com.nimbusds.jose.JOSEObjectType.JWT;
 import static com.nimbusds.jose.JWSAlgorithm.RS256;

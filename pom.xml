@@ -11,6 +11,7 @@
 	<modules>
 		<module>rest-auth-basic</module>
     	<module>rest-auth-jwt</module>
+    	<module>rest-jwt-login</module>
     </modules>
 	
 </project>

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cz.vut.fit.pis.jwt;
+package cz.vut.fit.pis.jwtlogin;
 
 /**
  * @author burgetr
