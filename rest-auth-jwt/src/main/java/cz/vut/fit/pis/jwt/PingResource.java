@@ -52,7 +52,7 @@ public class PingResource
             
             try
             {
-                String token = JwtTokenGenerator.generateJWTString("/jwt-token.json");
+                String token = JwtTokenGenerator.generateJWTString("/jwt-token.json", credentials.getLogin());
                 return Response.ok(token).build();
             } catch (Exception e) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
