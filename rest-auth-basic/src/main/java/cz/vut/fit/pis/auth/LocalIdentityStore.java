@@ -6,6 +6,7 @@ package cz.vut.fit.pis.auth;
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStore;
@@ -18,9 +19,11 @@ import javax.security.enterprise.identitystore.IdentityStore;
 public class LocalIdentityStore implements IdentityStore
 {
 
-    public CredentialValidationResult validate(UsernamePasswordCredential credential)
+    @Override
+    public CredentialValidationResult validate(Credential credential)
     {
-        if (credential.compareTo("test", "secret"))
+        if (credential instanceof UsernamePasswordCredential
+                && ((UsernamePasswordCredential) credential).compareTo("test", "secret"))
         {
             return new CredentialValidationResult("test", Set.of("admin"));
         }
@@ -29,5 +32,5 @@ public class LocalIdentityStore implements IdentityStore
             return CredentialValidationResult.INVALID_RESULT;
         }
     }
-    
+
 }

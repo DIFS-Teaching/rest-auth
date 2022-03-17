@@ -2,10 +2,13 @@ package cz.vut.fit.pis.auth;
 
 import java.security.Principal;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -16,10 +19,15 @@ public class PingResource
 {
     @Inject
     private Principal principal;
-
+    
+    @Context
+    private SecurityContext securityContext;
+    
     @GET
+    @PermitAll
     public String ping() {
-        return "Ping OK";
+        String login = (principal != null) ? principal.getName() : "unknown";
+        return "Hello, " + login + "! Ping ok.";
     }
     
     @GET
