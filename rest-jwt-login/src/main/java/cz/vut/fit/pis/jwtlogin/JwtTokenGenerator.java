@@ -2,9 +2,6 @@ package cz.vut.fit.pis.jwtlogin;
 
 import static com.nimbusds.jose.JOSEObjectType.JWT;
 import static com.nimbusds.jose.JWSAlgorithm.RS256;
-import static com.nimbusds.jwt.JWTClaimsSet.parse;
-import static java.lang.Thread.currentThread;
-import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -15,10 +12,12 @@ import org.eclipse.microprofile.jwt.Claims;
 
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
+
 
 /**
  * Based on the original implementation at
@@ -28,12 +27,12 @@ public class JwtTokenGenerator {
 
     public static String generateJWTString(String jsonResource, String username) throws Exception {
         byte[] byteBuffer = new byte[16384];
-        currentThread().getContextClassLoader()
+        Thread.currentThread().getContextClassLoader()
                        .getResource(jsonResource)
                        .openStream()
                        .read(byteBuffer);
 
-        JSONParser parser = new JSONParser(DEFAULT_PERMISSIVE_MODE);
+        JSONParser parser = new JSONParser(JSONParser.DEFAULT_PERMISSIVE_MODE);
         JSONObject jwtJson = (JSONObject) parser.parse(byteBuffer);
         
         long currentTimeInSecs = (System.currentTimeMillis() / 1000);
@@ -49,7 +48,7 @@ public class JwtTokenGenerator {
                                             .Builder(RS256)
                                             .keyID("/privateKey.pem")
                                             .type(JWT)
-                                            .build(), parse(jwtJson));
+                                            .build(), JWTClaimsSet.parse(jwtJson));
         
         signedJWT.sign(new RSASSASigner(readPrivateKey("/privateKey.pem")));
         
@@ -58,7 +57,7 @@ public class JwtTokenGenerator {
     
     public static PrivateKey readPrivateKey(String resourceName) throws Exception {
         byte[] byteBuffer = new byte[16384];
-        int length = currentThread().getContextClassLoader()
+        int length = Thread.currentThread().getContextClassLoader()
                                     .getResource(resourceName)
                                     .openStream()
                                     .read(byteBuffer);

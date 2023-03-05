@@ -5,11 +5,12 @@ package cz.vut.fit.pis.auth;
 
 import java.util.Set;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.security.enterprise.credential.Credential;
-import javax.security.enterprise.credential.UsernamePasswordCredential;
-import javax.security.enterprise.identitystore.CredentialValidationResult;
-import javax.security.enterprise.identitystore.IdentityStore;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.security.enterprise.credential.Credential;
+import jakarta.security.enterprise.credential.UsernamePasswordCredential;
+import jakarta.security.enterprise.identitystore.CredentialValidationResult;
+import jakarta.security.enterprise.identitystore.IdentityStore;
+
 
 /**
  *

@@ -2,12 +2,12 @@ package cz.vut.fit.pis.jwt;
 
 import java.security.Principal;
 
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-
 import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
 
 
 /**
