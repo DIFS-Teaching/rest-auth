@@ -7,6 +7,8 @@ import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
+import java.util.Date;
+import java.util.List;
 
 import org.eclipse.microprofile.jwt.Claims;
 
@@ -15,40 +17,34 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-
 
 /**
- * Based on the original implementation at
+ * Partially based on the original implementation at
  * https://github.com/javaee-samples/microprofile1.4-samples 
  */
 public class JwtTokenGenerator {
 
     public static String generateJWTString(String jsonResource, String username) throws Exception {
-        byte[] byteBuffer = new byte[16384];
-        Thread.currentThread().getContextClassLoader()
-                       .getResource(jsonResource)
-                       .openStream()
-                       .read(byteBuffer);
 
-        JSONParser parser = new JSONParser(JSONParser.DEFAULT_PERMISSIVE_MODE);
-        JSONObject jwtJson = (JSONObject) parser.parse(byteBuffer);
+        long currentTimeMillis = System.currentTimeMillis();
+        long expirationTimeMillis = currentTimeMillis + (1000 * 1000); // + 1000 seconds
         
-        long currentTimeInSecs = (System.currentTimeMillis() / 1000);
-        long expirationTime = currentTimeInSecs + 1000;
-       
-        jwtJson.put(Claims.iat.name(), currentTimeInSecs);
-        jwtJson.put(Claims.auth_time.name(), currentTimeInSecs);
-        jwtJson.put(Claims.exp.name(), expirationTime);
-        jwtJson.put(Claims.sub.name(), username);
-        jwtJson.put(Claims.upn.name(), username);
+        // create the claim set
+        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+        		 .issuer("fitdemo")
+        		 .issueTime(new Date(currentTimeMillis))
+        	     .expirationTime(new Date(expirationTimeMillis))
+        	     .subject(username)
+        	     .claim(Claims.upn.name(), username)
+        	     .claim(Claims.groups.name(), List.of("admin"))
+        	     .build();
         
+        // create the signed token
         SignedJWT signedJWT = new SignedJWT(new JWSHeader
                                             .Builder(RS256)
                                             .keyID("/privateKey.pem")
                                             .type(JWT)
-                                            .build(), JWTClaimsSet.parse(jwtJson));
+                                            .build(), claimsSet);
         
         signedJWT.sign(new RSASSASigner(readPrivateKey("/privateKey.pem")));
         
