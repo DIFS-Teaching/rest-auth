@@ -1,6 +1,6 @@
 # rest-auth
 
-(c) Radek Burget, 2021-2024
+(c) Radek Burget, 2021-2025
 
 JAX-RS authorization demos:
 
